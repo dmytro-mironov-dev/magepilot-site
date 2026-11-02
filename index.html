@@ -75,24 +75,76 @@ h1 span { color: var(--lime); }
 
 /* ticket path */
 .flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; counter-reset: step; }
-.flow li { counter-increment: step; display: grid; align-content: start; gap: 8px; padding: 16px 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; animation: pulse 12s linear infinite; animation-delay: calc(var(--i) * 2s); }
+.flow li { counter-increment: step; display: grid; align-content: start; gap: 8px; padding: 16px 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; transition: border-color .25s, box-shadow .25s; }
 .flow li::before { content: counter(step); font-size: 12px; color: var(--lime); font-weight: 700; }
 .flow li.human { border-style: dashed; }
 .flow p { font-size: 13px; line-height: 1.5; color: var(--muted); }
 .tag { font-size: 11px; color: var(--lime); }
-@keyframes pulse { 0%, 15% { border-color: var(--lime); box-shadow: 0 0 18px rgba(196, 245, 58, 0.22); } 17%, 100% { border-color: var(--line); box-shadow: none; } }
 
-/* demo board */
-.frame { background: var(--panel); border: 1px solid var(--line-strong); border-radius: 16px; padding: 14px; overflow-x: auto; }
-.frame-note { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; font-size: 12px; color: var(--muted); padding: 2px 4px 12px; }
-.board { display: grid; grid-template-columns: repeat(4, minmax(210px, 1fr)); gap: 10px; min-width: 880px; }
-.col { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: grid; align-content: start; gap: 10px; }
-.col h3 { display: flex; justify-content: space-between; font-size: 13px; }
-.col.alert { border-color: var(--warn); }
-.col.alert h3 { color: var(--warn); }
-.card { background: var(--row); border: 1px solid var(--line); border-radius: 10px; padding: 11px; display: grid; gap: 6px; font-size: 12.5px; line-height: 1.45; }
-.card b { color: var(--lime); font-size: 12px; }
-.chip { width: fit-content; font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; }
+/* live run */
+.theatre-section { padding-block: 8px clamp(44px, 7vw, 76px); border-top: 0; }
+.theatre { display: grid; grid-template-columns: minmax(0, 470px) minmax(0, 1fr); gap: clamp(20px, 4vw, 48px); align-items: center; }
+.orbit { position: relative; width: 100%; aspect-ratio: 1; }
+.orbit-ring { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ring { fill: none; stroke: var(--line-strong); stroke-width: 1; }
+.beam { stroke: var(--lime); stroke-width: 2; stroke-dasharray: 3 6; animation: flow 0.8s linear infinite; }
+.beam.human { stroke: var(--warn); }
+@keyframes flow { to { stroke-dashoffset: -18; } }
+.core { position: absolute; left: 50%; top: 50%; width: 40%; aspect-ratio: 1; transform: translate(-50%, -50%); }
+.core-ring { position: absolute; inset: -9%; border: 2px dotted var(--lime); border-radius: 50%; animation: spin 9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.core-inner { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 2px; background: var(--bg); border: 2px solid var(--lime); border-radius: 50%; box-shadow: 0 0 34px rgba(196, 245, 58, 0.45), inset 0 0 26px rgba(196, 245, 58, 0.16); animation: breathe 2.4s ease-in-out infinite; }
+@keyframes breathe { 50% { box-shadow: 0 0 56px rgba(196, 245, 58, 0.5), inset 0 0 34px rgba(196, 245, 58, 0.3); } }
+.core-inner b { font: 700 clamp(12px, 2.6vw, 18px) var(--display); }
+.core-inner small { color: var(--lime); font-size: clamp(11px, 1.8vw, 13px); }
+.node { position: absolute; transform: translate(-50%, -50%); display: grid; justify-items: center; gap: 4px; padding: 0; background: none; border: 0; color: var(--muted); font: 700 11px var(--mono); cursor: pointer; }
+.node:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; border-radius: 8px; }
+.tile { display: grid; place-items: center; width: clamp(38px, 11%, 52px); min-width: 38px; aspect-ratio: 1; background: var(--panel); border: 1px solid var(--line-strong); border-radius: 13px; transition: border-color .25s, box-shadow .25s; }
+.tile svg { width: 56%; fill: none; stroke: #a9b98a; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.node.on { color: var(--lime); }
+.node.on .tile { border: 2px solid var(--lime); box-shadow: 0 0 22px rgba(196, 245, 58, 0.5); background: #151b0b; }
+.node.on .tile svg { stroke: var(--lime); }
+.node.human.on { color: var(--warn); }
+.node.human.on .tile { border-color: var(--warn); box-shadow: 0 0 22px rgba(255, 138, 99, 0.5); }
+.node.human.on .tile svg { stroke: var(--warn); }
+.panes { display: grid; gap: 14px; min-width: 0; }
+.pane { background: var(--panel); border: 1px solid var(--line-strong); border-radius: 16px; padding: 16px 18px 18px; display: grid; gap: 12px; }
+.pane-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+.dot { display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 8px var(--lime); }
+.mini { background: none; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--text); padding: 3px 12px; font: 600 12px var(--mono); cursor: pointer; }
+.mini:hover { border-color: var(--lime); color: var(--lime); }
+.mini:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+.ticket { font-size: clamp(15px, 2vw, 19px); font-weight: 500; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 5px; }
+.steps li { height: 4px; border-radius: 2px; background: var(--line); }
+.steps li.past { background: rgba(196, 245, 58, 0.5); }
+.steps li.on { background: var(--lime); box-shadow: 0 0 8px var(--lime); }
+.log { min-height: 92px; display: grid; align-content: start; gap: 4px; font-size: 13px; line-height: 1.5; }
+.log i { font-style: normal; color: var(--lime); margin-right: 8px; }
+.log.fresh p { animation: rise .35s ease both; }
+.log.fresh p:nth-child(2) { animation-delay: .35s; }
+.log.fresh p:nth-child(3) { animation-delay: .7s; }
+@keyframes rise { from { transform: translateY(6px); opacity: .25; } to { transform: none; opacity: 1; } }
+.tg { width: min(100%, 440px); justify-self: end; background: #1d2a33; border-radius: 14px 14px 4px 14px; padding: 12px 14px; display: grid; gap: 6px; font: 400 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #eef3f6; min-height: 92px; align-content: start; }
+.tg-from { color: #6ab3f3; font-size: 13px; font-weight: 600; }
+.tg-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 13px; font-weight: 600; text-align: center; }
+.tg-btns[hidden] { display: none; }
+.tg-btns span { background: #2c3e4c; border-radius: 8px; padding: 6px; }
+.tg-btns span:first-child { outline: 1px solid #6ab3f3; }
+.flow li.on { border-color: var(--lime); box-shadow: 0 0 18px rgba(196, 245, 58, 0.22); }
+
+/* screens */
+.shot { margin: 0; display: grid; gap: 10px; }
+.shot img { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line-strong); }
+.shot.wide img { box-shadow: 0 0 60px rgba(196, 245, 58, 0.09); }
+.shot figcaption { font-size: 12.5px; color: var(--muted); }
+.scroll { overflow-x: auto; border-radius: 14px; }
+.scroll:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+.shot.wide .scroll img { min-width: 860px; }
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: clamp(24px, 5vw, 64px); align-items: center; margin-top: clamp(40px, 6vw, 68px); }
+.split-text { display: grid; gap: 16px; min-width: 0; }
+.phone { margin: 0; justify-self: center; width: min(100%, 300px); padding: 8px; background: #000; border: 1px solid var(--line-strong); border-radius: 30px; box-shadow: 0 0 50px rgba(196, 245, 58, 0.14); }
+.phone img { display: block; width: 100%; height: auto; border-radius: 22px; }
 
 /* features */
 .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 28px 40px; }
@@ -127,11 +179,11 @@ td code { color: var(--lime); font: inherit; }
 
 footer { border-top: 1px solid var(--line); padding-block: 26px; font-size: 12.5px; color: var(--muted); display: grid; gap: 6px; }
 
-@media (max-width: 960px) { .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 960px) { .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } .theatre, .split { grid-template-columns: minmax(0, 1fr); } .orbit { max-width: 470px; margin-inline: auto; } .tg { justify-self: stretch; width: 100%; } }
 @media (max-width: 420px) { .flow { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .flow li { animation: none; }
+  .beam, .core-ring, .core-inner, .log.fresh p { animation: none; }
 }
 </style>
 </head>
@@ -146,7 +198,7 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; font-size: 12.5
     <a href="#guardrails">Guardrails</a>
     <a href="#numbers">Numbers</a>
     <a href="#roadmap">Roadmap</a>
-    <a href="#author">Author</a>
+    <a href="#contact">Contact</a>
   </nav>
 </header>
 
@@ -156,10 +208,61 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; font-size: 12.5
     <h1>Magento tickets → agents → <span>results</span></h1>
     <p class="lede">MagePilot picks up sprint tickets from Jira, investigates the code, implements the change inside the project's docker-magento stack, checks it in a real browser and pushes a branch. You approve designs from your phone and open the pull request yourself.</p>
     <div class="actions">
-      <a class="btn primary" href="#flow">See how a ticket flows</a>
-      <a class="btn" href="#roadmap">Read the roadmap</a>
+      <a class="btn primary" href="#contact">Talk to me about MagePilot</a>
+      <a class="btn" href="#screens">See the product</a>
     </div>
   </div>
+
+  <section id="live" class="theatre-section" aria-label="Simulated run of a demo ticket">
+    <div class="wrap theatre">
+      <div class="orbit">
+        <svg class="orbit-ring" viewBox="0 0 400 400" aria-hidden="true">
+          <circle cx="200" cy="200" r="150" class="ring"/>
+          <line id="beam" class="beam" x1="200" y1="200" x2="350" y2="200"/>
+        </svg>
+        <div class="core"><div class="core-ring"></div><div class="core-inner">
+          <b>B2B-331</b><small id="core-stage">coder</small>
+        </div></div>
+        <button type="button" class="node" data-node="investigator" style="left:50.0%;top:12.5%" aria-label="Show the investigator step">
+            <span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></span><span class="node-label">investigator</span>
+          </button><button type="button" class="node" data-node="architect" style="left:76.5%;top:23.5%" aria-label="Show the architect step">
+            <span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V10l6-5 6 5v10M10 20v-5h4v5"/></svg></span><span class="node-label">architect</span>
+          </button><button type="button" class="node on" data-node="coder" style="left:87.5%;top:50.0%" aria-label="Show the coder step">
+            <span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 7-5 5 5 5M15.5 7l5 5-5 5M13.5 5l-3 14"/></svg></span><span class="node-label">coder</span>
+          </button><button type="button" class="node" data-node="qa" style="left:76.5%;top:76.5%" aria-label="Show the qa step">
+            <span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 3h5M10.5 3v6l-5.5 9.5A1.7 1.7 0 0 0 6.5 21h11a1.7 1.7 0 0 0 1.5-2.5L13.5 9V3M8 15h8"/></svg></span><span class="node-label">qa</span>
+          </button><button type="button" class="node" data-node="push" style="left:50.0%;top:87.5%" aria-label="Show the push step">
+            <span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="8" r="2.5"/><path d="M6 8.5v7M18 10.5c0 4-5 4-9.5 5"/></svg></span><span class="node-label">push</span>
+          </button><button type="button" class="node" data-node="staging" style="left:23.5%;top:76.5%" aria-label="Show the staging step">
+            <span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span><span class="node-label">staging</span>
+          </button><button type="button" class="node" data-node="estimate" style="left:12.5%;top:50.0%" aria-label="Show the estimate step">
+            <span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3.5 15 11.5-11.5 5.5 5.5L9 20.5ZM8 11l2 2M11 8l2 2"/></svg></span><span class="node-label">estimate</span>
+          </button><button type="button" class="node human" data-node="you" style="left:23.5%;top:23.5%" aria-label="Show the you step">
+            <span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c1-5 4-7 7.5-7s6.5 2 7.5 7"/></svg></span><span class="node-label">you</span>
+          </button>
+      </div>
+      <div class="panes">
+        <div class="pane">
+          <div class="pane-head">
+            <span><span class="dot"></span>Simulated run · demo ticket</span>
+            <button type="button" id="toggle" class="mini" hidden>Pause</button>
+          </div>
+          <h2 class="ticket">Tiered discount for wholesale customers</h2>
+          <ol class="steps" id="steps" aria-hidden="true"><li></li><li></li><li></li><li class="on"></li><li></li><li></li><li></li></ol>
+          <div class="log" id="log" aria-live="off">
+            <p><i>coder</i> Branch B2B-331-tiered-discount created from origin/master</p>
+            <p><i>coder</i> New total collector, no core preferences</p>
+            <p><i>coder</i> GrumPHP passed inside the container</p>
+          </div>
+        </div>
+        <div class="tg" id="tg">
+          <span class="tg-from">MagePilot bot</span>
+          <p id="tg-text">Design approved. Coding has started on a fresh branch.</p>
+          <div class="tg-btns" id="tg-btns" hidden><span>Approve</span><span>Changes</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section id="flow">
     <div class="wrap">
@@ -168,43 +271,38 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; font-size: 12.5
         <p class="muted">Agents handle the investigation, design, code and QA, each with its own permissions. Tickets run one at a time, on their own branch.</p>
       </div>
       <ol class="flow">
-        <li style="--i:0"><h3>Jira</h3><p>Pulls your sprint tickets into a local queue. Jira stays read-only.</p></li>
-        <li style="--i:1"><h3>Investigator</h3><p>Reads the ticket and the codebase and picks the path for the work.</p></li>
-        <li class="human" style="--i:2"><h3>Architect</h3><p>Writes a design for bigger changes.</p><span class="tag">You approve in Telegram</span></li>
-        <li style="--i:3"><h3>Coder</h3><p>Implements on a fresh branch. Commits pass GrumPHP in the container.</p></li>
-        <li style="--i:4"><h3>QA</h3><p>Checks the result in a real browser and sends screenshots.</p></li>
-        <li class="human" style="--i:5"><h3>Push</h3><p>The orchestrator pushes the branch and sends a report.</p><span class="tag">You review and open the PR</span></li>
+        <li data-flow="jira"><h3>Jira</h3><p>Pulls your sprint tickets into a local queue. Jira stays read-only.</p></li>
+        <li data-flow="investigator"><h3>Investigator</h3><p>Reads the ticket and the codebase and picks the path for the work.</p></li>
+        <li class="human" data-flow="architect"><h3>Architect</h3><p>Writes a design for bigger changes.</p><span class="tag">You approve in Telegram</span></li>
+        <li data-flow="coder"><h3>Coder</h3><p>Implements on a fresh branch. Commits pass GrumPHP in the container.</p></li>
+        <li data-flow="qa"><h3>QA</h3><p>Checks the result in a real browser and sends screenshots.</p></li>
+        <li class="human" data-flow="push"><h3>Push</h3><p>The orchestrator pushes the branch and sends a report.</p><span class="tag">You review and open the PR</span></li>
       </ol>
     </div>
   </section>
 
-  <section id="board">
+  <section id="screens">
     <div class="wrap">
       <div class="head prose">
         <h2>One board for every store</h2>
         <p class="muted">Every project follows the same docker-magento layout, so one tool can drive all of them. It starts a stack when it needs one and can run a second project on shifted ports.</p>
       </div>
-      <div class="frame" tabindex="0" role="region" aria-label="Example MagePilot board">
-        <div class="frame-note"><span>Example board</span><span>Tickets shown are made up</span></div>
-        <div class="board">
-          <div class="col">
-            <h3>Queue <span>2</span></h3>
-            <div class="card"><b>SHOP-214</b>Validate Dutch postcodes at checkout<span class="chip">storefront</span></div>
-            <div class="card"><b>PIM-84</b>Layered navigation: price filter ignores tier prices<span class="chip">catalog</span></div>
-          </div>
-          <div class="col">
-            <h3>In progress <span>1</span></h3>
-            <div class="card"><b>ERP-112</b>Retry failed order exports<span class="chip">coder</span></div>
-          </div>
-          <div class="col alert">
-            <h3>Waiting for me <span>1</span></h3>
-            <div class="card"><b>B2B-331</b>Tiered discount for wholesale customers<span class="chip">design ready to approve</span></div>
-          </div>
-          <div class="col">
-            <h3>Done <span>1</span></h3>
-            <div class="card"><b>SHOP-198</b>Show delivery estimate on the product page<span class="chip">branch pushed</span></div>
-          </div>
+      <figure class="shot wide">
+        <div class="scroll" tabindex="0" role="region" aria-label="MagePilot board, scrollable"><img src="assets/board.webp" width="1800" height="588" loading="lazy" alt="MagePilot board with columns from estimate through in progress, waiting for me, done and QA staging, filled with demo tickets."></div>
+        <figcaption>The MagePilot web UI. Tickets and costs shown are demo data.</figcaption>
+      </figure>
+      <div class="split">
+        <div class="split-text">
+          <h2>Decisions reach your phone</h2>
+          <p class="muted">When an agent is unsure, or a design needs your approval, MagePilot asks in Telegram. Answer with a button, a reply or a voice message. Work on that ticket waits for you, and the queue moves on if you don't answer in time.</p>
+          <figure class="shot">
+            <img src="assets/question.webp" width="1400" height="261" loading="lazy" alt="Web UI panel titled waiting for you, where the architect asks how a wholesale discount should combine with catalog price rules and offers three answer buttons.">
+            <figcaption>The same question in the web UI, with demo data.</figcaption>
+          </figure>
         </div>
+        <figure class="phone">
+          <img src="assets/telegram.webp" width="591" height="1042" loading="lazy" alt="Telegram chat with the MagePilot bot showing a design summary for a demo ticket, with Approve and Changes buttons.">
+        </figure>
       </div>
     </div>
   </section>
@@ -215,7 +313,7 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; font-size: 12.5
       <div class="features">
         <article><h3>Estimates on demand</h3><p>Drag a ticket to the estimate column and get hours per work item, assumptions, risks, questions for the client and a comment ready to post in Jira.</p></article>
         <article><h3>Staging checks</h3><p>When a task reaches staging, an agent walks the acceptance criteria on the site as a customer and reports back with screenshots.</p></article>
-        <article><h3>Questions on your phone</h3><p>When an agent is unsure, it asks in Telegram. Answer with a button, a reply or a voice message, transcribed locally.</p></article>
+        <article><h3>Voice answers</h3><p>Reply to an agent with a voice message. It is transcribed locally, and you confirm the text before it is sent.</p></article>
         <article><h3>Comment watching</h3><p>A new Jira comment is checked against the pushed branch. If it needs code changes, you decide whether the task goes back to the coder.</p></article>
       </div>
     </div>
@@ -305,13 +403,13 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; font-size: 12.5
     </div>
   </section>
 
-  <section id="author">
+  <section id="contact">
     <div class="wrap prose" style="display:grid;gap:12px">
       <h2>Dmytro Myronov</h2>
       <p>Senior Magento 2 / Adobe Commerce developer and backend lead, with 12 years in PHP and 8+ years of hands-on Magento. I work on multi-store platforms, ERP and payment integrations, performance and CI/CD. I built MagePilot and use it on my own tickets.</p>
-      <p><strong>Open to senior PHP roles, ideally Magento.</strong> Remote, based in Wrocław, Poland.</p>
+      <p><strong>Open to senior PHP roles, ideally Magento.</strong> Remote, based in Wrocław, Poland. If you run Magento stores and want to see MagePilot working on a real ticket, write to me as well.</p>
       <p class="muted">MagePilot is built with Python, the Claude Agent SDK, Playwright and a Telegram bot, on top of docker-magento by Mark Shust.</p>
-      <p><a href="https://www.linkedin.com/in/dmytro-myronov-3054397a">LinkedIn</a> · <a href="https://github.com/dmytro-mironov-dev">GitHub</a> · <a href="mailto:dmytro.mironov@gmail.com">dmytro.mironov@gmail.com</a></p>
+      <p><a class="btn primary" href="https://www.linkedin.com/in/dmytro-myronov-3054397a">Message me on LinkedIn</a> &nbsp;<a href="https://github.com/dmytro-mironov-dev">GitHub</a> · <a href="mailto:dmytro.mironov@gmail.com">dmytro.mironov@gmail.com</a></p>
     </div>
   </section>
 </main>
@@ -319,5 +417,77 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; font-size: 12.5
 <footer class="wrap">
   <p>MagePilot is an independent project, not affiliated with or endorsed by Adobe. Magento is a trademark of Adobe Inc.</p>
 </footer>
+<script>
+(() => {
+  const STAGES = [
+    { node: "investigator", flow: "investigator", log: ["Ticket and codebase read", "Touches totals and customer groups", "Complex change: asking for a design"], tg: "B2B-331 picked up from the sprint." },
+    { node: "architect", flow: "architect", log: ["design.md: new total collector", "Tiers editable per website", "No core preferences, no database changes"], tg: "Writing a design for B2B-331." },
+    { node: "you", flow: "architect", log: ["Waiting for your approval", "The next ticket can run if you're busy"], tg: "Design for B2B-331: tier discount 5 / 10 / 15 % at 500 / 1500 / 5000 EUR. Takes the bigger of tier and catalog rule discount.", buttons: true },
+    { node: "coder", flow: "coder", log: ["Branch B2B-331-tiered-discount created from origin/master", "New total collector, no core preferences", "GrumPHP passed inside the container"], tg: "Design approved. Coding has started on a fresh branch." },
+    { node: "qa", flow: "qa", log: ["Cart opened in a real browser", "10 % applied at 1500 EUR, wholesale group only", "3 screenshots attached to the report"], tg: "QA passed for B2B-331. 3 screenshots attached." },
+    { node: "push", flow: "push", log: ["Orchestrator pushed the branch", "Report ready", "You review it and open the PR"], tg: "B2B-331 is pushed. Your review is next." },
+    { node: "staging", flow: "push", log: ["Acceptance criteria walked on staging as a customer", "No orders placed, no data changed", "Report sent"], tg: "Staging check for B2B-331 passed." },
+  ];
+  const INTERVAL = 3400;
+  const $ = (id) => document.getElementById(id);
+  const nodes = [...document.querySelectorAll(".node")];
+  const flows = [...document.querySelectorAll("[data-flow]")];
+  const bars = [...$("steps").children];
+  const orbit = document.querySelector(".orbit");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let current = 3, timer = null;
+
+  const point = (name) => {
+    const style = nodes.find((n) => n.dataset.node === name).style;
+    return [parseFloat(style.left) * 4, parseFloat(style.top) * 4];
+  };
+  const escapeText = (text) => { const el = document.createElement("span"); el.textContent = text; return el.innerHTML; };
+
+  function show(index) {
+    current = index;
+    const stage = STAGES[index];
+    nodes.forEach((n) => n.classList.toggle("on", n.dataset.node === stage.node));
+    flows.forEach((f) => f.classList.toggle("on", f.dataset.flow === stage.flow));
+    bars.forEach((b, i) => { b.classList.toggle("on", i === index); b.classList.toggle("past", i < index); });
+    const [x, y] = point(stage.node);
+    $("beam").setAttribute("x2", x);
+    $("beam").setAttribute("y2", y);
+    $("beam").classList.toggle("human", stage.node === "you");
+    $("core-stage").textContent = stage.node === "you" ? "waiting for you" : stage.node;
+    const log = $("log");
+    log.classList.remove("fresh");
+    log.innerHTML = stage.log.map((line) => `<p><i>${stage.node}</i> ${escapeText(line)}</p>`).join("");
+    if (!reduced) { void log.offsetWidth; log.classList.add("fresh"); }
+    $("tg-text").textContent = stage.tg;
+    $("tg-btns").hidden = !stage.buttons;
+  }
+
+  function stop() {
+    clearInterval(timer);
+    timer = null;
+    $("toggle").textContent = "Play";
+  }
+  function play() {
+    clearInterval(timer);
+    timer = setInterval(() => { if (!document.hidden) show((current + 1) % STAGES.length); }, INTERVAL);
+    $("toggle").textContent = "Pause";
+  }
+
+  nodes.forEach((node) => node.addEventListener("click", () => {
+    const index = STAGES.findIndex((s) => s.node === node.dataset.node);
+    if (index >= 0) { stop(); show(index); }
+  }));
+  nodes.filter((n) => n.dataset.node === "estimate").forEach((n) => {
+    n.disabled = true;
+    n.style.cursor = "default";
+    n.removeAttribute("aria-label");
+  });
+  $("toggle").hidden = false;
+  $("toggle").addEventListener("click", () => (timer ? stop() : play()));
+
+  show(current);
+  if (reduced) stop(); else play();
+})();
+</script>
 </body>
 </html>
