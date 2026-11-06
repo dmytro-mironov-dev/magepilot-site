@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MagePilot</title>
 <meta name="description" content="MagePilot works Magento tickets with AI agents, from Jira to a pushed branch, with a developer in charge of every decision that matters.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MagePilot: AI agents for Magento tickets, now with upgrades">
+<meta property="og:description" content="Jira to investigation, code, browser QA and a pushed branch, plus Magento upgrades that check requirements, the Docker stack and every core override first. A developer stays in charge.">
+<meta property="og:url" content="https://dmytro-mironov-dev.github.io/magepilot-site/">
+<meta property="og:image" content="https://dmytro-mironov-dev.github.io/magepilot-site/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23050605' stroke='%23c4f53a' stroke-width='2'/%3E%3Cpath d='M16 6 23 25 16 20.5 9 25Z' fill='%23c4f53a'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -146,6 +154,18 @@ h1 span { color: var(--lime); }
 .phone { margin: 0; justify-self: center; width: min(100%, 300px); padding: 8px; background: #000; border: 1px solid var(--line-strong); border-radius: 30px; box-shadow: 0 0 50px rgba(196, 245, 58, 0.14); }
 .phone img { display: block; width: 100%; height: auto; border-radius: 22px; }
 
+/* upgrades */
+.upgrade-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 400px); gap: clamp(24px, 5vw, 56px); align-items: center; }
+.upgrade-video { margin: 0; width: min(100%, 400px); justify-self: center; aspect-ratio: 1; border-radius: 24px; overflow: hidden; border: 1px solid rgba(242, 99, 34, 0.55); box-shadow: 0 0 70px rgba(242, 99, 34, 0.2); background: #0a0b09; }
+.upgrade-video video, .upgrade-video img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: c; }
+.checks li { counter-increment: c; display: grid; grid-template-columns: 34px 1fr; gap: 6px; font-size: 14px; }
+.checks li::before { content: counter(c, decimal-leading-zero); color: #f26322; font-weight: 700; }
+.checks b { color: var(--text); font-weight: 600; }
+.checks span { color: var(--muted); }
+.shots2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: clamp(32px, 5vw, 52px); }
+.badge-new { display: inline-block; margin-left: 10px; padding: 2px 10px; border-radius: 999px; background: #f26322; color: #120700; font: 700 11px var(--mono); vertical-align: middle; letter-spacing: .05em; }
+
 /* features */
 .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 28px 40px; }
 .features article { display: grid; align-content: start; gap: 8px; padding-top: 14px; border-top: 2px solid var(--line-strong); }
@@ -179,7 +199,7 @@ td code { color: var(--lime); font: inherit; }
 
 footer { border-top: 1px solid var(--line); padding-block: 26px; font-size: 12.5px; color: var(--muted); display: grid; gap: 6px; }
 
-@media (max-width: 960px) { .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } .theatre, .split { grid-template-columns: minmax(0, 1fr); } .orbit { max-width: 470px; margin-inline: auto; } .tg { justify-self: stretch; width: 100%; } }
+@media (max-width: 960px) { .upgrade-hero, .shots2 { grid-template-columns: minmax(0, 1fr); } .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } .theatre, .split { grid-template-columns: minmax(0, 1fr); } .orbit { max-width: 470px; margin-inline: auto; } .tg { justify-self: stretch; width: 100%; } }
 @media (max-width: 420px) { .flow { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -195,6 +215,7 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; font-size: 12.5
   </a>
   <nav aria-label="Sections">
     <a href="#flow">How it works</a>
+    <a href="#upgrades">Upgrades</a>
     <a href="#guardrails">Guardrails</a>
     <a href="#numbers">Numbers</a>
     <a href="#roadmap">Roadmap</a>
@@ -204,7 +225,7 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; font-size: 12.5
 
 <main id="top">
   <div class="wrap hero">
-    <p class="status">In use on real Magento tickets. Source code is not public yet.</p>
+    <p class="status">In use on real Magento tickets. New: <a href="#upgrades">Magento upgrades</a>. Source code is not public yet.</p>
     <h1>Magento tickets → agents → <span>results</span></h1>
     <p class="lede">MagePilot picks up sprint tickets from Jira, investigates the code, implements the change inside the project's docker-magento stack, checks it in a real browser and pushes a branch. You approve designs from your phone and open the pull request yourself.</p>
     <div class="actions">
@@ -307,6 +328,40 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; font-size: 12.5
     </div>
   </section>
 
+  <section id="upgrades">
+    <div class="wrap">
+      <div class="upgrade-hero">
+        <div class="head" style="margin:0">
+          <h2>Magento upgrades<span class="badge-new">NEW</span></h2>
+          <p class="muted">An upgrade ticket takes its own route. Composer is ten minutes of it; the rest is checking everything around it, so that's what the agents do, in this order, stopping to ask when the decision is yours.</p>
+          <ol class="checks">
+            <li><p><b>Requirements first.</b> <span>What the target needs (PHP, MariaDB, OpenSearch, Valkey, RabbitMQ, Composer) next to what the project's Docker stack runs today.</span></p></li>
+            <li><p><b>A new stack on its own branch.</b> <span>New images in compose.yaml on a branch of the docker repo, fresh DB volumes, a database dump first. Going back is a git switch.</span></p></li>
+            <li><p><b>Composer, then the new PHP.</b> <span>The host composer resolves the upgrade, then check-platform-reqs runs inside the new PHP container. A failing package stops the run and asks you.</span></p></li>
+            <li><p><b>Patches and overrides.</b> <span>Composer patches are re-applied or dropped. The Ampersand Patch Helper lists each changed core file the project overrides, and an agent reviews every one.</span></p></li>
+            <li><p><b>setup:upgrade and QA.</b> <span>di:compile, then the usual browser QA and a report you can paste into Confluence.</span></p></li>
+          </ol>
+        </div>
+        <figure class="upgrade-video">
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/orbit.webp" aria-label="MagePilot's agent orbit during an upgrade from 2.4.7-p8 to 2.4.9, with the Magento logo at the centre.">
+            <source src="assets/orbit.webm" type="video/webm">
+            <source src="assets/orbit.mp4" type="video/mp4">
+          </video>
+        </figure>
+      </div>
+      <div class="shots2">
+        <figure class="shot">
+          <img src="assets/upgrade-plan.webp" width="1600" height="1048" loading="lazy" alt="Upgrade tab: the requirements of Magento 2.4.9 against the current Docker stack, with the images to install, the docker branch and the packages to upgrade or leave alone.">
+          <figcaption>Requirements against the current stack. Red: the Docker image tops out below Adobe's requirement, so you choose.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="assets/upgrade-review.webp" width="1600" height="645" loading="lazy" alt="Patch Helper summary with counts per type, and the review of each flagged core file with a fix or no change verdict.">
+          <figcaption>Every overridden core file that changed, reviewed: fix, or no change, and why. Demo data.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
   <section id="features">
     <div class="wrap">
       <div class="head prose"><h2>Beyond writing code</h2></div>
@@ -315,6 +370,10 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; font-size: 12.5
         <article><h3>Staging checks</h3><p>When a task reaches staging, an agent walks the acceptance criteria on the site as a customer and reports back with screenshots.</p></article>
         <article><h3>Voice answers</h3><p>Reply to an agent with a voice message. It is transcribed locally, and you confirm the text before it is sent.</p></article>
         <article><h3>Comment watching</h3><p>A new Jira comment is checked against the pushed branch. If it needs code changes, you decide whether the task goes back to the coder.</p></article>
+        <article><h3>Security review</h3><p>After QA, a read-only agent reviews the branch for injection, missing escaping, ACL and CSRF gaps. Switch it on or off per project.</p></article>
+        <article><h3>How to test it</h3><p>QA leaves hand-test steps on the card, so the reviewer and the client's tester repeat exactly what was checked.</p></article>
+        <article><h3>Start over</h3><p>One button: the old branch is renamed and kept, the task's files are archived, and the ticket starts clean from the investigation.</p></article>
+        <article><h3>Your language</h3><p>Questions and reports come in the developer's language, whatever language the ticket is written in.</p></article>
       </div>
     </div>
   </section>
@@ -339,6 +398,13 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; font-size: 12.5
           </tbody>
         </table>
       </div>
+      <div class="split" style="margin-top:40px;grid-template-columns:minmax(0,1fr) minmax(0,460px)">
+        <div class="split-text">
+          <h3>How much autonomy, per project</h3>
+          <p class="muted">A settings window sets the levels, globally or per store. Git for agents: strict, or cherry-pick by hash and merging origin/master on the task branch only. Composer: own packages only, any package named explicitly, or free. Uncommitted work in your folder: wait, stash and give it back, or ask in Telegram. Whatever the level, push, rebase, reset --hard and composer config stay blocked.</p>
+        </div>
+        <figure class="shot"><img src="assets/settings.webp" width="1200" height="805" loading="lazy" alt="MagePilot settings window with levels for git and composer for agents and for the platform check in upgrades."></figure>
+      </div>
       <h3 style="margin-top:30px">Staging is shared, so the check only looks</h3>
       <ol class="layers">
         <li>A script loaded before the site's own stops admin requests other than GET and the login form, plus storefront requests that order, pay or change the account.</li>
@@ -353,10 +419,10 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; font-size: 12.5
     <div class="wrap">
       <div class="head prose"><h2>Numbers so far</h2></div>
       <div class="numbers">
-        <div><strong>158</strong><span>agent runs, 12–30 Oct 2026</span></div>
-        <div><strong>23</strong><span>real tickets worked on</span></div>
-        <div><strong>7</strong><span>agent roles</span></div>
-        <div><strong>178</strong><span>automated tests</span></div>
+        <div><strong>221</strong><span>agent runs, 12 Oct – 6 Nov 2026</span></div>
+        <div><strong>31</strong><span>real tickets, 8 stores</span></div>
+        <div><strong>10</strong><span>agent roles</span></div>
+        <div><strong>261</strong><span>automated tests</span></div>
       </div>
       <p class="footnote">Runs include estimate-only tickets and runs that were interrupted or stopped to wait for an answer, so this measures activity. Outcome metrics such as cost per ticket and first-pass QA rate are next on the roadmap.</p>
     </div>
@@ -374,11 +440,15 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; font-size: 12.5
             <li>Browser QA with screenshots</li>
             <li>Estimates and staging checks</li>
             <li>Tool-call guardrails</li>
+            <li>Magento upgrade route with the Docker stack</li>
+            <li>Security review after QA</li>
+            <li>Settings per project, start over</li>
           </ul>
         </div>
         <div class="now">
           <h3>Now</h3>
           <ul>
+            <li>The first real upgrade end to end, 2.4.7 to 2.4.9</li>
             <li>Metrics: cost and time per stage, first-pass rate, estimate against actual</li>
             <li>Tutorial: a minimal agent pipeline for Magento, with runnable code</li>
           </ul>
